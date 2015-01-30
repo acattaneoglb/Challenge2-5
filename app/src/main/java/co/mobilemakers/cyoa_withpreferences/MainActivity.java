@@ -1,17 +1,87 @@
 package co.mobilemakers.cyoa_withpreferences;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
+
+    private final static String KEY_FRAGMENT = "KEY_FRAGMENT";
+
+    public enum DifficultyEnum {
+        EASY,
+        NORMAL,
+        HARD
+    }
+
+    MainFragment mMainFragment;
+
+    Fragment shownFragment;
+
+    public void goToAlley(DifficultyEnum difficulty) {
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, shownFragment = new AlleyFragment())
+                .addToBackStack(null)
+                .commit();
+
+        ((Levellable)shownFragment).setDifficulty(difficulty);
+    }
+
+    public void goToRoom(DifficultyEnum difficulty) {
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, shownFragment = new RoomFragment())
+                .addToBackStack(null)
+                .commit();
+
+        ((Levellable)shownFragment).setDifficulty(difficulty);
+    }
+
+    public void winGame() {
+        FragmentManager fragmentManager = getFragmentManager();
+        //fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, shownFragment = new WinningFragment())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    public void loseGame() {
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, shownFragment = new LosingFragment())
+                .commit();
+    }
+
+    public void restartGame() {
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, shownFragment = mMainFragment)
+                .commit();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mMainFragment = new MainFragment();
+
+        FragmentManager fragmentManager = getFragmentManager();
+        if (savedInstanceState != null) {
+            shownFragment = getFragmentManager().getFragment(savedInstanceState, KEY_FRAGMENT);
+        }
+        else {
+            fragmentManager.beginTransaction()
+                    .add(R.id.container, shownFragment = mMainFragment)
+                    .commit();
+        }
     }
 
 
@@ -35,5 +105,12 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getFragmentManager().putFragment(outState, KEY_FRAGMENT, shownFragment);
     }
 }
