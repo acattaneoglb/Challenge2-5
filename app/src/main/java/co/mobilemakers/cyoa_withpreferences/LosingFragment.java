@@ -2,11 +2,14 @@ package co.mobilemakers.cyoa_withpreferences;
 
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 /**
@@ -14,6 +17,7 @@ import android.widget.Button;
  */
 public class LosingFragment extends Fragment {
 
+    TextView mTextLosing;
     Button mButtonRestart;
 
     public LosingFragment() {
@@ -31,6 +35,16 @@ public class LosingFragment extends Fragment {
     }
 
 
+    private void updateText(View view) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String userName = sharedPreferences.getString(getResources().getString(R.string.key_pref_username),
+                getResources().getString(R.string.default_name));
+
+        mTextLosing = (TextView)view.findViewById(R.id.text_losing_message);
+        mTextLosing.setText(String.format(getResources().getString(R.string.losing_text),
+                userName));
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,6 +52,8 @@ public class LosingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_losing, container, false);
 
         prepareButton(view);
+
+        updateText(view);
 
         return view;
     }

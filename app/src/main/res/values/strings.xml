@@ -19,8 +19,13 @@
     <string name="room_description">You have entered a room with two fragmented doors. Strange noises come from both.</string>
     <string name="enter_door_1">Enter door no. 1</string>
     <string name="enter_door_2">Enter door no. 2</string>
-    <string name="winning_text">You\'ve reached the gold!</string>
-    <string name="losing_text">You\'ve fallen into the pit of despair!</string>
+    <string name="winning_text">Congratulations, %1$s, Brave Fighter! You\'ve reached the gold!</string>
+    <string name="losing_text">Sorry, %1$s. You were a Brave Fighter, but you\'ve fallen into the pit of despair!</string>
     <string name="restart_game">Restart game</string>
+    <string name="key_pref_username">KEY_PREF_USERNAME</string>
+    <string name="user_name_title">User name</string>
+    <string name="user_name_summary">Enter the user name</string>
+    <string name="default_name">John Doe</string>
+    <string name="title_activity_settings">Settings</string>
 
 </resources>
